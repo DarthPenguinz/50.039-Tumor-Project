@@ -10,7 +10,7 @@ Dataset Alternative Split:
 https://www.kaggle.com/datasets/awsaf49/brats2020-training-data/data
 ```
 
-Create a folder called Dataset. Place your downloaded dataset into folder
+Create a folder called Dataset. Place your downloaded dataset into folder (It should have the following path for one mri file. eg ./Dataset/BraTS2020_TrainingData/MICCAI_BraTS2020_TrainingData/BraTS20_Training_001/BraTS20_Training_001_flair.nii )
 
 
 Create a virtual environment using python 3.9.18 version
