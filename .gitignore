@@ -1,4 +1,8 @@
-/augmented_dataset
+/Dataset/
+/venv/
+/.venv/
+/numpy_dataset/
+/augmented_dataset/
+/fullApplication/
 /saved_models
-/numpy_dataset
-/Dataset
+/__pycache__/
