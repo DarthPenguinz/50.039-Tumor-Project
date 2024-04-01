@@ -101,11 +101,7 @@ def split_layers(data):
 
 
 def display_slice(slice1, slice2, tag1 = 'Slice 1', tag2 = 'Slice 2'):
-    # if slice_index < 0 or slice_index >= array_3d.shape[2]:
-    #     raise ValueError("Slice index is out of bounds.")
-    
-    # Extract the specified slice
-    fig, ax = plt.subplots(1, 2, figsize=(10, 5))  # 1 row, 2 columns
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5)) 
     
     # Display the first slice
     ax[0].imshow(slice1)
@@ -185,7 +181,7 @@ def train_model(model, train_dataloader, val_dataloader ,optimizer, feature_rang
             loss_val_all.append(np.mean(loss_val_ep))
             
     ## Print out what's happening
-        print(f"Train loss: {loss_train_all[-1]} | Test loss: {[loss_val_all[-1]]}")
+        print(f"Train loss: {loss_train_all[-1]} | Val loss: {[loss_val_all[-1]]}")
         os.makedirs(os.path.join("./saved_models", save_folder), exist_ok=True)
         torch.save(model, os.path.join(os.path.join("./saved_models", save_folder), f'model_{counter}.pth'))
         
@@ -207,7 +203,7 @@ def plot_two_lines_same_x(y1, y2):
     if len(y1) != len(y2):
         raise ValueError("The lists must have the same length.")
 
-    x = list(range(len(y1)))  # Generates an x-axis based on the length of the y-values lists
+    x = list(range(len(y1)))
 
     plt.plot(x, y1, label='train')
     plt.plot(x, y2, label='val')
@@ -236,6 +232,8 @@ def test_model(model, test_dataloader, device, lossfn, store_preds=20):
             losses.append(lossfn(y_pred, output).cpu().detach().numpy())
     return np.mean(losses), np.array(preds), np.array(actuals)
 
+
+# ------------------------------------------ Visualization Methods ------------------------------------------
 
 def visualize_model_single_channels(model1,model2,model3, test_dataloader, device, feature_range, number_gen = 5):
     model1 = model1.to(device)
