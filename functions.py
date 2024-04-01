@@ -110,12 +110,12 @@ def display_slice(slice1, slice2, tag1 = 'Slice 1', tag2 = 'Slice 2'):
     # Display the first slice
     ax[0].imshow(slice1)
     ax[0].set_title(tag1)
-    ax[0].axis('off')  # Hide the axis
+    ax[0].axis('off')  
     
     # Display the second slice
     ax[1].imshow(slice2)
     ax[1].set_title(tag2)
-    ax[1].axis('off')  # Hide the axis
+    ax[1].axis('off') 
     
     plt.show()
     
@@ -130,7 +130,6 @@ class CustomDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        # Assuming your data has at least 5 elements per sample as per your description
         sample = self.data[idx]
         return (np.array([sample[0], *sample[-3:]]), np.array([sample[1]]))
     
@@ -145,14 +144,12 @@ def train_model(model, train_dataloader, val_dataloader ,optimizer, feature_rang
     loss_val_all = []
     counter = 0
     
-    # Create training and testing loop
     for epoch in range(epochs):
         counter += 1
         print(f"Epoch: {epoch+1} of {epochs}")
         model.train()
         loss_ep = []
         
-        # Add a loop to loop through training batches
         for batch, (data, output) in enumerate(train_dataloader):
             data, output = data.to(device), output.to(device)
             data = data[:, feature_range[0]:feature_range[1],:,:]
@@ -174,17 +171,10 @@ def train_model(model, train_dataloader, val_dataloader ,optimizer, feature_rang
                 
         loss_train_all.append(np.mean(loss_ep))
         
-
-    #     # Divide total train loss by length of train dataloader (average loss per batch per epoch)
-
-        ### Testing
-        # Setup variables for accumulatively adding up loss and accuracy
-        test_loss_1, test_loss_2, test_loss = 0, 0, 0
         model.eval()
         with torch.inference_mode():
             loss_val_ep = []
             for val, y in val_dataloader:
-                #
                 val, y = val.to(device), y.to(device)
                 val = val[:, feature_range[0]:feature_range[1],:,:]
 
@@ -221,22 +211,82 @@ def plot_two_lines_same_x(y1, y2):
 
     plt.plot(x, y1, label='train')
     plt.plot(x, y2, label='val')
-    plt.xlabel('X axis (based on list length)')
-    plt.ylabel('Y axis')
-    plt.title('Plot of Two Lines with Shared X Axis')
     plt.legend()
     plt.show()
     
     
     
-def test_model(model, test_dataloader, device, lossfn):
+def test_model(model, test_dataloader, device, lossfn, store_preds=20):
     model = model.to(device)
     model.eval()
     losses = []
+    preds = []
+    actuals = []
     with torch.inference_mode():
         for batch, (data, output) in enumerate(test_dataloader):
+            if batch % 10 == 0: print(f"{batch}/{len(test_dataloader)}")
             data, output = data.to(device), output.to(device)
             y_pred = model(data)
-            y_pred = y_pred.cpu().detach().numpy()
-            losses.append(lossfn(y_pred, output))
-    return np.mean(losses)
+            if len(preds) < store_preds:
+                for i in range(len(output)):
+                    if torch.max(output[i]) == 0:
+                        continue
+                    preds.append(y_pred[i].cpu().detach().numpy())
+                    actuals.append(output[i].cpu().detach().numpy())
+            losses.append(lossfn(y_pred, output).cpu().detach().numpy())
+    return np.mean(losses), np.array(preds), np.array(actuals)
+
+
+def visualize_model_single_channels(model1,model2,model3, test_dataloader, device, feature_range, number_gen = 5):
+    model1 = model1.to(device)
+    model2 = model2.to(device)
+    model3 = model3.to(device)
+    model1.eval()
+    model2.eval()
+    model3.eval()
+    model1s = []
+    model2s = []
+    model3s = []
+    outputs = []
+    with torch.inference_mode():
+        for batch, (data_batch, output_batch) in enumerate(test_dataloader):
+            data_batch, output_batch = data_batch.to(device), output_batch.to(device)
+            for i in range(len(data_batch)):
+                data = data_batch[i].unsqueeze(0)[:, feature_range[0]:feature_range[1],:,:]
+                output = output_batch[i].unsqueeze(0)
+                if torch.max(output) == 0:
+                    continue
+                y_pred1 = model1(data)
+                y_pred2 = model2(data)
+                y_pred3 = model3(data)
+                model1s.append(y_pred1.cpu().detach().numpy())
+                model2s.append(y_pred2.cpu().detach().numpy())
+                model3s.append(y_pred3.cpu().detach().numpy())
+                outputs.append(output.cpu().detach().numpy())
+                if len(model1s) == number_gen:
+                    return model1s, model2s, model3s, outputs
+                
+                
+                
+
+def display_4_slice(slice1, slice2, slice3, slice4, tag1 = 'Slice 1', tag2 = 'Slice 2', tag3 = 'Slice 3', tag4 = 'Slice 4'):
+    fig, ax = plt.subplots(1, 4, figsize=(10, 5)) 
+    
+    ax[0].imshow(slice1)
+    ax[0].set_title(tag1)
+    ax[0].axis('off')  
+    
+    ax[1].imshow(slice2)
+    ax[1].set_title(tag2)
+    ax[1].axis('off') 
+    
+    ax[2].imshow(slice3)
+    ax[2].set_title(tag3)
+    ax[2].axis('off') 
+    
+    ax[3].imshow(slice4)
+    ax[3].set_title(tag4)
+    ax[3].axis('off') 
+    
+    plt.show()
+    

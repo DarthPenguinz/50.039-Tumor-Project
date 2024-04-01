@@ -8,7 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 from matplotlib.figure import Figure
 import __main__
 
-model_path = "./saved_models/multi_channel_main/model_5.pth"
+model_path = "./saved_models/multi_channel_further/model_5.pth"
 setattr(__main__, "UNet", UNet)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model = torch.load(model_path, map_location=torch.device(device))
