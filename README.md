@@ -63,3 +63,8 @@ python3 app.py
 6. Once completed, the mask can be observed. You may also choose to upload the actual mask (tagged as the seg.nii file) within data point folder. 
 
 7. The sliders can be used to view the different layers of the model. 
+
+
+
+# View Demo at 
+https://www.youtube.com/watch?v=zRvSbnc
