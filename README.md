@@ -8,7 +8,7 @@
 
 2. Within the downloaded dataset, move the "BraTS2020_TrainingData" folder into the "Dataset" folder, we ignore the ValidationData folder as it does not contain the mask files as the dataset was meant for a competition. Next, ensure that the "BraTS2020_TrainingData" folder contains the "MICCAI_BraTS2020_TrainingData" folder. This then contains all 369 data points, each of which consists of the 4 MRI modes and mask file. 
 
-3. Download the saved models from the https://drive.google.com/file/d/1MtMT03ijXayPh8wCJmqzN9nAuYjrAphN/view?usp=sharing
+3. Download the saved models from the https://drive.google.com/file/d/1g80HLTz_TKZcVFGG5Tl8YfXDDn8Ploh2/view?usp=sharing
 
 4. Move the models folder into the project folder, ensuring the folder is named "saved_models"
 
