@@ -35,7 +35,7 @@ pip install -r requirements.txt
 ```
 
 ## Run training.ipynb Jupyter Notebook
-1. Ensure that the dataset_path variable is defined correctly. 
+1. Ensure that the dataset_path variable is defined correctly. In both training.ipynb and comparison.ipynb 
 
 2. Uncomment the third cell to generate the numpy dataset.
 
